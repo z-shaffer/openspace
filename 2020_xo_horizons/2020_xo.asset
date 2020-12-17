@@ -1,0 +1,60 @@
+local assetHelper = asset.require('util/asset_helper')
+local sunTransforms = asset.require('scene/solarsystem/sun/transforms')
+
+local trajectory = asset.syncedResource({
+    Name = "2020 XO Trajectory",
+    Type = "HttpSynchronization",
+    Identifier = "2020_xo_horizons",
+    Version = 1
+ })
+
+local XO2020Trail = {
+    Identifier = "2020XOTrail",
+    Parent = sunTransforms.SolarSystemBarycenter.Identifier,
+    Renderable = {
+        Type = "RenderableTrailTrajectory",
+        Translation = {
+            Type = "HorizonsTranslation",
+            HorizonsTextFile = trajectory .. "/horizons_2020_xo.dat"
+        },
+        Color = { 0.9, 0.9, 0.0 },
+        StartTime = "2014 JAN 01 00:00:00",
+        EndTime = "2023 JAN 01 00:00:00",
+        SampleInterval = 7000,
+        TimeStampSubsampleFactor = 1
+    },
+    GUI = {
+        Name = "2020 XO Trail",
+        Path = "/Solar System/Interstellar"
+    }
+}
+
+local XO2020Position = {
+    Identifier = "2020XOPosition",
+    Parent = sunTransforms.SolarSystemBarycenter.Identifier,
+    Transform = {
+        Translation = {
+            Type = "HorizonsTranslation",
+            HorizonsTextFile = trajectory .. "/horizons_2020_xo.dat"
+        },
+    },
+    GUI = {
+        Name = "2020 XO",
+        Path = "/Solar System/Interstellar"
+    }
+}
+
+assetHelper.registerSceneGraphNodesAndExport(asset, { XO2020Position, XO2020Trail })
+
+asset.meta = {
+    Name = "2020 XO",
+    Version = "1.0",
+    Description = [[ This asset contains the trail
+        and position of 2020 XO from 2014 JAN 01 00:00:00
+        to 2023 JAN 01 00:00:00. Data from JPL Horizons']],
+    Author = "Zach Shaffer",
+    URL = "https://ssd.jpl.nasa.gov/horizons.cgi",
+    License = [[ JPL-authored documents are sponsored by NASA under Contract
+        NAS7-030010. All documents available from this server may be protected
+        under the U.S. and Foreign Copyright Laws."]]
+}

@@ -1,0 +1,60 @@
+local assetHelper = asset.require('util/asset_helper')
+local sunTransforms = asset.require('scene/solarsystem/sun/transforms')
+
+local trajectory = asset.syncedResource({
+    Name = "1997 XE10 Trajectory",
+    Type = "HttpSynchronization",
+    Identifier = "1997_xe10_horizons",
+    Version = 1
+ })
+
+local XE101997Trail = {
+    Identifier = "1997XE10Trail",
+    Parent = sunTransforms.SolarSystemBarycenter.Identifier,
+    Renderable = {
+        Type = "RenderableTrailTrajectory",
+        Translation = {
+            Type = "HorizonsTranslation",
+            HorizonsTextFile = trajectory .. "/horizons_1997_xe10.dat"
+        },
+        Color = { 0.9, 0.9, 0.0 },
+        StartTime = "2014 JAN 01 00:00:00",
+        EndTime = "2023 JAN 01 00:00:00",
+        SampleInterval = 7000,
+        TimeStampSubsampleFactor = 1
+    },
+    GUI = {
+        Name = "1997 XE10 Trail",
+        Path = "/Solar System/Interstellar"
+    }
+}
+
+local XE101997Position = {
+    Identifier = "1997XE10Position",
+    Parent = sunTransforms.SolarSystemBarycenter.Identifier,
+    Transform = {
+        Translation = {
+            Type = "HorizonsTranslation",
+            HorizonsTextFile = trajectory .. "/horizons_1997_xe10.dat"
+        },
+    },
+    GUI = {
+        Name = "1997 XE10",
+        Path = "/Solar System/Interstellar"
+    }
+}
+
+assetHelper.registerSceneGraphNodesAndExport(asset, { XE101997Position, XE101997Trail })
+
+asset.meta = {
+    Name = "1997 XE10",
+    Version = "1.0",
+    Description = [[ This asset contains the trail
+        and position of 1997 XE10 from 2014 JAN 01 00:00:00
+        to 2023 JAN 01 00:00:00. Data from JPL Horizons']],
+    Author = "Zach Shaffer",
+    URL = "https://ssd.jpl.nasa.gov/horizons.cgi",
+    License = [[ JPL-authored documents are sponsored by NASA under Contract
+        NAS7-030010. All documents available from this server may be protected
+        under the U.S. and Foreign Copyright Laws."]]
+}

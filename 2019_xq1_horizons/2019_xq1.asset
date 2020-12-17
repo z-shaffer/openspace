@@ -1,0 +1,60 @@
+local assetHelper = asset.require('util/asset_helper')
+local sunTransforms = asset.require('scene/solarsystem/sun/transforms')
+
+local trajectory = asset.syncedResource({
+    Name = "2019 XQ1 Trajectory",
+    Type = "HttpSynchronization",
+    Identifier = "2019_xq1_horizons",
+    Version = 1
+ })
+
+local XQ12019Trail = {
+    Identifier = "2019XQ1Trail",
+    Parent = sunTransforms.SolarSystemBarycenter.Identifier,
+    Renderable = {
+        Type = "RenderableTrailTrajectory",
+        Translation = {
+            Type = "HorizonsTranslation",
+            HorizonsTextFile = trajectory .. "/horizons_2019_xq1.dat"
+        },
+        Color = { 0.9, 0.9, 0.0 },
+        StartTime = "2014 JAN 01 00:00:00",
+        EndTime = "2023 JAN 01 00:00:00",
+        SampleInterval = 7000,
+        TimeStampSubsampleFactor = 1
+    },
+    GUI = {
+        Name = "2019 XQ1 Trail",
+        Path = "/Solar System/Interstellar"
+    }
+}
+
+local XQ12019Position = {
+    Identifier = "2019XQ1Position",
+    Parent = sunTransforms.SolarSystemBarycenter.Identifier,
+    Transform = {
+        Translation = {
+            Type = "HorizonsTranslation",
+            HorizonsTextFile = trajectory .. "/horizons_2019_xq1.dat"
+        },
+    },
+    GUI = {
+        Name = "2019 XQ1",
+        Path = "/Solar System/Interstellar"
+    }
+}
+
+assetHelper.registerSceneGraphNodesAndExport(asset, { XQ12019Position, XQ12019Trail })
+
+asset.meta = {
+    Name = "2019 XQ1",
+    Version = "1.0",
+    Description = [[ This asset contains the trail
+        and position of 2019 XQ1 from 2014 JAN 01 00:00:00
+        to 2023 JAN 01 00:00:00. Data from JPL Horizons']],
+    Author = "Zach Shaffer",
+    URL = "https://ssd.jpl.nasa.gov/horizons.cgi",
+    License = [[ JPL-authored documents are sponsored by NASA under Contract
+        NAS7-030010. All documents available from this server may be protected
+        under the U.S. and Foreign Copyright Laws."]]
+}
